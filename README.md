@@ -1,2 +1,2 @@
-# adopt-me
+# PetFinder
 PetFinder React App
