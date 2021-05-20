@@ -212,6 +212,20 @@
   .search-params button:focus {
     border: 1px solid cornflowerblue;
   }
+
+  .navigation {
+    display: flex;
+    flex-direction: row;
+  }
+
+  .search-params .navigation button {
+    border-radius: 50%;
+  }
+
+  .search-params .navigation button:disabled {
+    opacity: 0.6;
+    pointer-events: none;
+  }
   
   #modal {
     background-color: rgba(0, 0, 0, 0.9);

@@ -1,4 +1,5 @@
-import { useState, useEffect } from "react";
+import { useState, useContext, useEffect } from "react";
+import ThemeContext from "./ThemeContext";
 import useBreedList from "./useBreedList";
 import Results from "./Results";
 
@@ -8,27 +9,20 @@ const SearchParams = () => {
    const [location, setLocation] = useState("");
    const [animal, setAnimal] = useState("");
    const [breed, setBreed] = useState("");
-   const [pets, setPets] = useState([]);
+   const [submit, setSubmit] = useState(false);
    const [breeds] = useBreedList(animal);
+   const [theme, setTheme] = useContext(ThemeContext);
 
    useEffect(() => {
-      requestPets();
-   }, []); // eslint-disable-line react-hooks/exhaustive-deps
-
-   async function requestPets() {
-      const json = await fetch(
-         `http://pets-v2.dev-apis.com/pets?animal=${animal}&location=${location}&breed=${breed}`
-      ).then((res) => res.json());
-
-      setPets(json.pets);
-   }
+      setSubmit(false);
+   }, [location, animal, breed]);
 
    return (
       <div className="search-params">
          <form
             onSubmit={(e) => {
                e.preventDefault();
-               requestPets();
+               setSubmit(true);
             }}
          >
             <label htmlFor="location">
@@ -74,10 +68,32 @@ const SearchParams = () => {
                   ))}
                </select>
             </label>
-            <button>Submit</button>
+
+            <label htmlFor="theme">
+               Theme
+               <select
+                  value={theme}
+                  onChange={(e) => setTheme(e.target.value)}
+                  onBlur={(e) => setTheme(e.target.value)}
+               >
+                  <option value="darkblue">Dark Blue</option>
+                  <option value="peru">Peru</option>
+                  <option value="chartreuse">Chartreuse</option>
+                  <option value="mediumorchid">Medium Orchid</option>
+               </select>
+            </label>
+
+            <button style={{ backgroundColor: theme }}>Submit</button>
          </form>
 
-         {<Results pets={pets} />}
+         {
+            <Results
+               animal={animal}
+               location={location}
+               breed={breed}
+               submit={submit}
+            />
+         }
       </div>
    );
 };
